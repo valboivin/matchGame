@@ -8,8 +8,6 @@ $(document).ready (function(){
   MatchGame.renderCards(MatchGame.generateCardValues(), $('#game'));
 });
 
-
-
 /*
   Generates and returns an array of matching card values.
  */
@@ -27,7 +25,6 @@ MatchGame.generateCardValues = function () {
 
   return cardValues;
 }
-
 
 /*
   Converts card values to jQuery card objects and adds them to the supplied game
@@ -52,7 +49,6 @@ MatchGame.renderCards = function(cardValues, $game) {
   for (var i = 0; i < cardValues.length; i++) {
     var $card = $('<div class="card col-md-3 col-xs-3"></div>');
     $card.data('value', cardValues[i]);
-    $card.attr('data-flipped', 'false');
     $card.data('color', cardColors[cardValues[i]-1]);
 
     $game.append($card);
@@ -70,29 +66,24 @@ MatchGame.renderCards = function(cardValues, $game) {
 MatchGame.flipCard = function($card, $game) {
   var flippedCards = $game.data('flippedCards');
 
-  // if (flippedCards.indexOf($card.data('value')) == -1) {
     $card.css('background-color', $card.data('color'));
     $card.text($card.data('value'));
-    $card.attr('data-flipped', 'true');
-    flippedCards.push($card.data('value'));
+    flippedCards.push($card);
 
     if (flippedCards.length == 2 ) {
-      if (flippedCards[0] == flippedCards[1]) {
-        $('data-flipped["true"]').css('background-color', 'rgb(153,153,153)');
-        $('data-flipped["true"]').css('color', 'rgb(204,204,204)');
+      if (flippedCards[0].data('value') == flippedCards[1].data('value')) {
+        for (var i = 0; i < flippedCards.length; i++) {
+          flippedCards[i].css('background-color', 'rgb(153,153,153)');
+          flippedCards[i].css('color', 'rgb(204,204,204)');
+        }
       } else {
-        $('.card').css('background-color', '');
-        $('.card').text('');
-        $('.card').attr('data-flipped', 'false');
+        setTimeout(function(){
+          for (var i = 0; i < flippedCards.length; i++) {
+            flippedCards[i].css('background-color', '');
+            flippedCards[i].text('');
+          }
+        }, 500);
       }
       $game.data ('flippedCards', []);
-    } else {
-
     }
-
-  // }
-
-  // else {
-    // return false;
-  // };
 };
